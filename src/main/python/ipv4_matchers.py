@@ -1,7 +1,7 @@
 import re
 
 # todo: complete this regex
-ipv4Regex = r'^\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\.([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\.([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\.([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\b$'
+ipv4Regex = r'(^|(?=\s))([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\.([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\.([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\.([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)($|\s)'
 
 def isIpv4Address(address):
     if address == None:
@@ -14,6 +14,20 @@ def isIpv4Address(address):
         return True
 
     return False
+
+def extractIpv4AddressesFrom(text):
+    if text == None:
+        return None
+
+    regex = re.compile(ipv4Regex, re.MULTILINE)
+    addresses = regex.finditer(str(text))
+    results = []
+
+    for current in addresses:
+        results.append(current.group())
+
+    return results
+
 
 # todo: complete this regex
 netmaskRegex = None
