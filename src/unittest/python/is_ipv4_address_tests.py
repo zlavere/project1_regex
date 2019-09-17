@@ -1,7 +1,6 @@
 import unittest
 from ipv4_matchers import *
 
-# sample test class
 class TestIsIPv4Address(unittest.TestCase):
 
     def testPassValidIPv4Address(self):

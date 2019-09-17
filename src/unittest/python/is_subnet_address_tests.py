@@ -23,6 +23,18 @@ class TestIsSubnetAddress(unittest.TestCase):
         address = '255.255.255.192'
         self.assertTrue(isNetMask(address))
 
+    def testValidSubnetMaskWithLeadingZeroes(self):
+        address = '00.00.00.00'
+        self.assertTrue(isNetMask(address))
+
+    def testValidSubnetMaskWithTwoLeadingZeroes(self):
+        address = '000.000.000.000'
+        self.assertTrue(isNetMask(address))
+
+    def testValidSubnetMaskWithLeadingZeroInLastOctet(self):
+        address = '255.255.192.00'
+        self.assertTrue(isNetMask(address))
+
     def testInvalidAllOnesNetmask(self):
         address = '1.1.1.1'
         self.assertFalse(isNetMask(address))
@@ -35,11 +47,15 @@ class TestIsSubnetAddress(unittest.TestCase):
         address = '192.255.255.255'
         self.assertFalse(isNetMask(address))
 
-    def testInvalidZeroInFirstOctetBeforeNonZeroOctets(self):
+    def testInvalidZeroInFirstOctetFollowedByNonZeroes(self):
         address = '0.255.255.255'
         self.assertFalse(isNetMask(address))
 
-    def testSecondOctetIsInvalid(self):
+    def testInvalidZeroInFirstOctetNonZeroInSecond(self):
+        address = '0.255.0.0'
+        self.assertFalse(isNetMask(address))
+
+    def testInvalidSecondOctet(self):
         address = '255.42.0.0'
         self.assertFalse(isNetMask(address))
 
