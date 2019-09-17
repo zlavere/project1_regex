@@ -51,10 +51,28 @@ def extractIpv4AddressesFrom(text):
     return results
 
 netmaskRegex = re.compile(r'''(
-(^|(?=\s))                                  # start anchors
-([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\.   # first Octet
-([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\.   # second Octet
-([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)\.   # third Octet
-([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]?)     # last Octet
-($|\s)                                      # end anchors
-)''',re.VERBOSE | re.MULTILINE)
+(^|(?=\s))                                                                                                              # start anchors
+(255|254|252|248|240|224|192|128|0)\.                                                                                   # first octet
+((?<=255\.)255|(?<=255\.)254|(?<=255\.)252|(?<=255\.)248|(?<=255\.)240|(?<=255\.)224|(?<=255\.)192|(?<=255\.)128|0)\.   # second octet
+((?<=255\.)255|(?<=255\.)254|(?<=255\.)252|(?<=255\.)248|(?<=255\.)240|(?<=255\.)224|(?<=255\.)192|(?<=255\.)128|0)\.   # third octet
+((?<=255\.)255|(?<=255\.)254|(?<=255\.)252|(?<=255\.)248|(?<=255\.)240|(?<=255\.)224|(?<=255\.)192|(?<=255\.)128|0)     # last octet
+($|\s)                                                                                                                  # end anchors
+)''', re.VERBOSE | re.MULTILINE)
+
+def isNetMask(address):
+    """Determines if a string is a valid Subnet mask.
+
+    Args:
+        address: String to validate as Subnet mask.
+    Returns:
+        True if address is a valid Subnet mask, otherwise False.
+    """
+    if address == None:
+        return False
+
+    searchResult = netmaskRegex.search(address)
+
+    if searchResult != None:
+        return True
+
+    return False
